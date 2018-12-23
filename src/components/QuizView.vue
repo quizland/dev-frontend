@@ -1,8 +1,7 @@
 <template>
-  <div class="quiz">
-    <h1>Quiz View</h1>
-    <h3>Category id: {{ categoryId }}</h3>
-    <h3>Quiz id: {{ quizId }}</h3>
+  <div class="container">
+    <h1>Category {{ categoryId }}</h1>
+    <h2>Quiz No: {{ quizId }}</h2>
     <ul>
       <li v-for="(question, index) in categories[categoryIndex].quizes[quizIndex]" :key="index" >
         <form>
@@ -15,19 +14,36 @@
                     <span>{{answer}}</span>
                 </label>
               </li>
+              <div v-if="showAnswers">
+                <span style="color: green">Correct answer: {{ question.answers[question.correctAnswer] }}</span>&nbsp;
+                <span :style="'color: ' + (pickedAnswers[index] === question.answers[question.correctAnswer] ? 'green' : 'red')">
+                  Your answer: {{ pickedAnswers[index] }}
+                </span>
+              </div>
             </ul>
           </div>
         </form>
       </li>
     </ul>
-    <div class="btn-toolbar row" role="toolbar" aria-label="Toolbar with button groups" v-if="showCheckResult">
-      <div class="btn-group mr-2 mx-auto" role="group" aria-label="First group">
-        <button class="btn btn-primary" @click="calculateResult">Check result</button>
-      </div>
-      <div class="btn-group mr-2 mx-auto" role="group" aria-label="Second group">
-        <button class="btn btn-secondary" @click="showAnswers = true" :disabled="disabledShowAnswers">Show answers</button>
-      </div>
+
+    <div v-if="showCheckResult">
+      <button class="btn btn-primary" @click="calculateResult">Check result</button>&nbsp;
+      <button class="btn btn-secondary" @click="showAnswers = !showAnswers" :disabled="disabledShowAnswers">{{showAnswers ? 'Hide' : 'Show'}} answers</button>
     </div>
+
+    <br>
+    <div class="card" v-if="showResult">
+      <span>Your result: {{ resultProcentage }}%</span>
+      <br>
+      <span>Time for completion: {{ new Date(completionTime).toISOString().slice(-13, -5) }}</span>
+    </div>
+    <br>
+
+    <div class="btn-group">
+      <button class="btn btn-dark" @click="previousQuiz" :disabled="+quizId === 1">Previous quiz</button>
+      <button class="btn btn-dark" @click="nextQuiz" :disabled="+quizId === categories[categoryIndex].quizes.length">Next quiz</button>
+    </div>
+
   </div>
 </template>
 
@@ -37,118 +53,22 @@ export default {
   props: ['categoryId', 'quizId'],
   data () {
     return {
-      categories: [
-        {
-          category: 'JavaScript',
-          icon: 'js-icon',
-          quizes: [
-            [
-              {
-                question: 'question 1',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4'
-                ],
-                correctAnswer: 0
-              },
-              {
-                question: 'question 2',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4',
-                ],
-                correctAnswer: 2
-              }
-            ],
-            [
-              {
-                question: 'question 1',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4'
-                ],
-                correctAnswer: 1
-              },
-              {
-                question: 'question 2',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4',
-                ],
-                correctAnswer: 2
-              }
-            ]
-          ]
-        }, {
-          category: 'jQuery',
-          icon: 'jquery-icon',
-          quizes: [
-            [
-              {
-                question: 'question 1',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4'
-                ],
-                correctAnswer: 0
-              },
-              {
-                question: 'question 2',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4',
-                ],
-                correctAnswer: 2
-              }
-            ],
-            [
-              {
-                question: 'question 1',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4'
-                ],
-                correctAnswer: 0
-              },
-              {
-                question: 'question 2',
-                answers: [
-                  'answer1',
-                  'answer2',
-                  'answer3',
-                  'answer4',
-                ],
-                correctAnswer: 3
-              }
-            ]
-          ]
-        }
-      ],
       pickedAnswers: [],
       disabledShowAnswers: true,
       showAnswers: false,
+      showResult: false,
+      startTime: 0,
+      completionTime: 0,
+      result: 0
     }
   },
   mounted() {
-    //this.categoryId = this.$router.params.categoryId;
-    //this.quizId = this.$router.params.quizId;
-    console.log(this.categories[this.categoryIndex].quizes[this.quizIndex]);
+    this.startTime = new Date();
   },
   computed: {
+    categories() {
+      return this.$store.getters.getCategories;
+    },
     categoryIndex () {
       return this.categories.findIndex(x => x.category === this.categoryId);
     },
@@ -157,12 +77,31 @@ export default {
     },
     showCheckResult () {
       return (this.pickedAnswers.filter(x => x !== undefined).length === this.categories[this.categoryIndex].quizes[this.quizIndex].length);
+    },
+    resultProcentage () {
+      return (this.result / this.pickedAnswers.length * 100).toFixed(2);
     }
   },
   methods: {
-    calculateResult() {
+    calculateResult () {
       this.disabledShowAnswers = false;
-
+      this.showResult = true;
+      this.result = 0;
+      let questions =  this.categories[this.categoryIndex].quizes[this.quizIndex];
+      for (let i = 0; i < questions.length; i++) {
+        if (questions[i].correctAnswer === questions[i].answers.indexOf(this.pickedAnswers[i])) {
+          this.result++;
+        }
+      }
+      let endTime = new Date();
+      this.completionTime = endTime - this.startTime;
+      return this.result;
+    },
+    previousQuiz () {
+      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) - 1));
+    },
+    nextQuiz () {
+      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) + 1));
     }
   }
 }

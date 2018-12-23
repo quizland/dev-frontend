@@ -29,14 +29,14 @@ export default new Router({
       meta: { title: 'About Project Quiz Land' }
     },
     {
-      path: '/quizes/:categoryId',
+      path: '/:categoryId/quizes',
       component: CategoryView,
       name: CategoryView.name,
       meta: { title: 'Quizes Dashboard' },
       props: true
     },
     {
-      path: '/quizes/:categoryId/:quizId',
+      path: '/:categoryId/quiz/:quizId',
       component: QuizView,
       name: QuizView.name,
       meta: { title: 'Quiz View' },
