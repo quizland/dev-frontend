@@ -34,15 +34,6 @@ export default new Router({
       name: CategoryView.name,
       meta: { title: 'Quizes Dashboard' },
       props: true
-      // children: [
-      //   {
-      //     path: '/quizes/:categoryId/:quizId',
-      //     component: QuizView,
-      //     name: QuizView.name,
-      //     meta: { title: 'Quiz View' },
-      //     props: true
-      //   }
-      // ]
     },
     {
       path: '/quizes/:categoryId/:quizId',
