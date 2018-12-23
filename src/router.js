@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Dashboard from './components/Dashboard.vue'
+import About from './components/About.vue'
 import CategoryView from './components/CategoryView.vue'
 import QuizView from './components/QuizView.vue'
 
@@ -12,7 +13,7 @@ let notFoundComponent = Vue.extend({
 })
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -22,20 +23,33 @@ export default new Router({
       meta: { title: 'Catergories Dashboard' }
     },
     {
+      path: '/about',
+      component: About,
+      name: About.name,
+      meta: { title: 'About Project Quiz Land' }
+    },
+    {
       path: '/quizes/:categoryId',
       component: CategoryView,
       name: CategoryView.name,
       meta: { title: 'Quizes Dashboard' },
-      props: true,
-      children: [
-        {
-          path: '/quizes/:categoryId/:quizId',
-          component: QuizView,
-          name: QuizView.name,
-          meta: { title: 'Quiz View' },
-          props: true
-        }
-      ]
+      props: true
+      // children: [
+      //   {
+      //     path: '/quizes/:categoryId/:quizId',
+      //     component: QuizView,
+      //     name: QuizView.name,
+      //     meta: { title: 'Quiz View' },
+      //     props: true
+      //   }
+      // ]
+    },
+    {
+      path: '/quizes/:categoryId/:quizId',
+      component: QuizView,
+      name: QuizView.name,
+      meta: { title: 'Quiz View' },
+      props: true
     },
     {
       path: '*',
