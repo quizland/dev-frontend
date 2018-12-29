@@ -4,9 +4,14 @@
     <ul>
       <li v-for="(quiz, index) in categories[categoryIndex].quizes" :key="index">
         <div class="card" @click="choseQuiz(index)">
-          {{ categoryId }}
+          <h4>
+            <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/>
+            {{ categoryId }}
+          </h4>
           <br>
-          Quiz No {{ index + 1 }}
+          <h4>
+            Quiz No {{ index + 1 }}
+          </h4>
         </div>
       </li>
     </ul>

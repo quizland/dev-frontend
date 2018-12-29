@@ -2,6 +2,7 @@ import Vue from 'vue'
 // import firebase from 'firebase'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore'
 import firebaseConfig from './firebaseConfig'
 import App from './App.vue'
 import router from './router'
@@ -20,6 +21,13 @@ Vue.prototype.$bus = EventBus
 let app = ''
 
 firebase.initializeApp(firebaseConfig)
+// const firebaseApp = firebase.initializeApp(firebaseConfig)
+// firebase firestore timestamp fix
+const firestore = firebase.firestore()
+const settings = { timestampsInSnapshots: true }
+firestore.settings(settings)
+// // export default firebaseApp.firestore()
+export default firestore
 
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {

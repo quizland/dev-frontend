@@ -11,7 +11,7 @@
         <input type="password" v-model="password" placeholder="Password"><br>
         <i class="fa fa-lock" style="color:CornflowerBlue"></i>&nbsp;
         <input type="password" v-model="password2" placeholder="Re-type Password"><br>
-        <span v-if="password!==password2" style="color: red">Passwods did not match!</span>
+        <span v-if="password!==password2" style="color: red">Passwords did not match!</span>
         <button class="btn btn-primary" @click="signUp" :disabled="password!==password2">Register</button>
         <span>or go back to <router-link to="/login">login</router-link>.</span>
       </div>

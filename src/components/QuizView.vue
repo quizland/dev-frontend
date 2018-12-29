@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <h1>Category {{ categoryId }}</h1>
+    <h1>Category {{ categoryId }} <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/></h1>
     <h2>Quiz No: {{ quizId }}</h2>
     <ul>
-      <li v-for="(question, index) in categories[categoryIndex].quizes[quizIndex]" :key="index" >
+      <li v-for="(question, index) in categories[categoryIndex].quizes[quizIndex].quiz" :key="index" >
         <form>
           <div class="card">
             <!-- <h5>{{ question.question }}</h5> -->
@@ -77,7 +77,7 @@ export default {
       return (Number(this.quizId) - 1)
     },
     showCheckResult () {
-      return (this.pickedAnswers.filter(x => x !== undefined).length === this.categories[this.categoryIndex].quizes[this.quizIndex].length)
+      return (this.pickedAnswers.filter(x => x !== undefined).length === this.categories[this.categoryIndex].quizes[this.quizIndex].quiz.length)
     },
     resultProcentage () {
       return (this.result / this.pickedAnswers.length * 100).toFixed(2)
@@ -88,7 +88,7 @@ export default {
       this.disabledShowAnswers = false
       this.showResult = true
       this.result = 0
-      let questions = this.categories[this.categoryIndex].quizes[this.quizIndex]
+      let questions = this.categories[this.categoryIndex].quizes[this.quizIndex].quiz
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].correctAnswer === questions[i].answers.indexOf(this.pickedAnswers[i])) {
           this.result++
