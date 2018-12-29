@@ -21,19 +21,19 @@ export default {
     return {
     }
   },
-  mounted() {
+  mounted () {
   },
   computed: {
-    categories() {
-      return this.$store.getters.getCategories;
+    categories () {
+      return this.$store.getters.getCategories
     },
     categoryIndex () {
-      return this.categories.findIndex(x => x.category === this.categoryId);
+      return this.categories.findIndex(x => x.category === this.categoryId)
     }
   },
   methods: {
-    choseQuiz(index) {
-      this.$router.push('/' + this.categoryId + '/quiz/' + (Number(index) + 1));
+    choseQuiz (index) {
+      this.$router.push('/' + this.categoryId + '/quiz/' + (Number(index) + 1))
     }
   }
 }

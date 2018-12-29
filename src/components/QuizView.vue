@@ -28,7 +28,7 @@
 
     <div v-if="showCheckResult">
       <button class="btn btn-primary" @click="calculateResult">Check result</button>&nbsp;
-      <button class="btn btn-secondary" @click="showAnswers = !showAnswers" :disabled="disabledShowAnswers">{{showAnswers ? 'Hide' : 'Show'}} answers</button>
+      <button class="btn btn-warning" @click="showAnswers = !showAnswers" :disabled="disabledShowAnswers">{{showAnswers ? 'Hide' : 'Show'}} answers</button>
     </div>
 
     <br>
@@ -62,46 +62,46 @@ export default {
       result: 0
     }
   },
-  mounted() {
-    this.startTime = new Date();
+  mounted () {
+    this.startTime = new Date()
   },
   computed: {
-    categories() {
-      return this.$store.getters.getCategories;
+    categories () {
+      return this.$store.getters.getCategories
     },
     categoryIndex () {
-      return this.categories.findIndex(x => x.category === this.categoryId);
+      return this.categories.findIndex(x => x.category === this.categoryId)
     },
     quizIndex () {
-      return (Number(this.quizId) - 1);
+      return (Number(this.quizId) - 1)
     },
     showCheckResult () {
-      return (this.pickedAnswers.filter(x => x !== undefined).length === this.categories[this.categoryIndex].quizes[this.quizIndex].length);
+      return (this.pickedAnswers.filter(x => x !== undefined).length === this.categories[this.categoryIndex].quizes[this.quizIndex].length)
     },
     resultProcentage () {
-      return (this.result / this.pickedAnswers.length * 100).toFixed(2);
+      return (this.result / this.pickedAnswers.length * 100).toFixed(2)
     }
   },
   methods: {
     calculateResult () {
-      this.disabledShowAnswers = false;
-      this.showResult = true;
-      this.result = 0;
-      let questions =  this.categories[this.categoryIndex].quizes[this.quizIndex];
+      this.disabledShowAnswers = false
+      this.showResult = true
+      this.result = 0
+      let questions = this.categories[this.categoryIndex].quizes[this.quizIndex]
       for (let i = 0; i < questions.length; i++) {
         if (questions[i].correctAnswer === questions[i].answers.indexOf(this.pickedAnswers[i])) {
-          this.result++;
+          this.result++
         }
       }
-      let endTime = new Date();
-      this.completionTime = endTime - this.startTime;
-      return this.result;
+      let endTime = new Date()
+      this.completionTime = endTime - this.startTime
+      return this.result
     },
     previousQuiz () {
-      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) - 1));
+      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) - 1))
     },
     nextQuiz () {
-      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) + 1));
+      this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) + 1))
     }
   }
 }
