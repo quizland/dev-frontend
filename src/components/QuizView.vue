@@ -6,12 +6,13 @@
       <li v-for="(question, index) in categories[categoryIndex].quizes[quizIndex]" :key="index" >
         <form>
           <div class="card">
-            <h5>{{ question.question }}</h5>
+            <!-- <h5>{{ question.question }}</h5> -->
+            <h5 v-html="question.question"></h5>
             <ul>
               <li v-for="(answer, j) in question.answers" :key="j">
                 <label class="radio">
                     <input type="radio" name="answer" :value="answer" v-model="pickedAnswers[index]">
-                    <span>{{answer}}</span>
+                    <span> {{answer}} </span>
                 </label>
               </li>
               <div v-if="showAnswers">
