@@ -10,6 +10,7 @@ import CategoryView from './components/CategoryView.vue'
 import QuizView from './components/QuizView.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
+import Admin from './components/Admin.vue'
 
 Vue.use(Router)
 
@@ -55,6 +56,13 @@ const router = new Router({
       component: QuizView,
       name: QuizView.name,
       meta: { title: 'Quiz View', requiresAuth: true },
+      props: true
+    },
+    {
+      path: '/admin',
+      component: Admin,
+      name: Admin.name,
+      meta: { title: 'Admin Panel', requiresAuth: true },
       props: true
     },
     {

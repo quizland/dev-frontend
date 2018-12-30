@@ -2,6 +2,11 @@
   <div class="container">
     <h1>Category {{ categoryId }} <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/></h1>
     <h2>Quiz No: {{ quizId }}</h2>
+    <div class="btn-group">
+      <button class="btn btn-dark" @click="previousQuiz" :disabled="+quizId === 1">Previous quiz</button>
+      <button class="btn btn-dark" @click="nextQuiz" :disabled="+quizId === categories[categoryIndex].quizes.length">Next quiz</button>
+    </div>
+    <br><br>
     <ul>
       <li v-for="(question, index) in categories[categoryIndex].quizes[quizIndex].quiz" :key="index" >
         <form>
@@ -16,7 +21,7 @@
                 </label>
               </li>
               <div v-if="showAnswers">
-                <span style="color: green">Correct answer: {{ question.answers[question.correctAnswer] }}</span>&nbsp;
+                <span style="color: green">Correct answer: {{ question.answers[question.correctAnswer] }}</span>&nbsp;&nbsp;&nbsp;
                 <span :style="'color: ' + (pickedAnswers[index] === question.answers[question.correctAnswer] ? 'green' : 'red')">
                   Your answer: {{ pickedAnswers[index] }}
                 </span>
@@ -26,25 +31,23 @@
         </form>
       </li>
     </ul>
-
     <div v-if="showCheckResult">
       <button class="btn btn-primary" @click="calculateResult">Check result</button>&nbsp;
       <button class="btn btn-warning" @click="showAnswers = !showAnswers" :disabled="disabledShowAnswers">{{showAnswers ? 'Hide' : 'Show'}} answers</button>
     </div>
-
     <br>
     <div class="card" v-if="showResult">
+      <span v-if="Math.round(resultProcentage) === 100" style="color: red"><strong>CONGRATULATIONS!</strong></span>
+      <br v-if="Math.round(resultProcentage) === 100">
       <span>Your result: {{ resultProcentage }}%</span>
       <br>
       <span>Time for completion: {{ new Date(completionTime).toISOString().slice(-13, -5) }}</span>
     </div>
     <br>
-
     <div class="btn-group">
       <button class="btn btn-dark" @click="previousQuiz" :disabled="+quizId === 1">Previous quiz</button>
       <button class="btn btn-dark" @click="nextQuiz" :disabled="+quizId === categories[categoryIndex].quizes.length">Next quiz</button>
     </div>
-
   </div>
 </template>
 
