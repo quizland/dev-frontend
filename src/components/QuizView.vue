@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <h1>Category {{ categoryId }} <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/></h1>
+    <router-link :to="'/' + categoryId + '/quizes'">
+      <h1>Category {{ categoryId }} <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/></h1>
+    </router-link>
     <h2>Quiz No: {{ quizId }}</h2>
     <div class="btn-group">
       <button class="btn btn-dark" @click="previousQuiz" :disabled="+quizId === 1">Previous quiz</button>
@@ -37,7 +39,7 @@
     </div>
     <br>
     <div class="card" v-if="showResult">
-      <span v-if="Math.round(resultProcentage) === 100" style="color: red"><strong>CONGRATULATIONS!</strong></span>
+      <span v-if="Math.round(resultProcentage) === 100" style="color: red"><strong>CONGRATULATIONS {{currentUserName.toUpperCase()}}!</strong></span>
       <br v-if="Math.round(resultProcentage) === 100">
       <span>Your result: {{ resultProcentage }}%</span>
       <br>
@@ -72,6 +74,9 @@ export default {
   computed: {
     categories () {
       return this.$store.getters.getCategories
+    },
+    currentUserName () {
+      return this.$store.getters.getCurrentUserName
     },
     categoryIndex () {
       return this.categories.findIndex(x => x.category === this.categoryId)

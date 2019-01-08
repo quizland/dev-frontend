@@ -39,25 +39,29 @@ export default {
   name: 'Navbar',
   data () {
     return {
-      isLoggedIn: false,
-      currentUserEmail: '',
-      currentUser: ''
+      isLoggedIn: false
     }
   },
   computed: {
     currentUserName () {
-      return this.currentUserEmail.split('@')[0]
+      return this.$store.getters.getCurrentUserName
     }
   },
   created () {
+    let currentUserEmail = ''
+    let currentUserName = ''
     if (firebase.auth().currentUser) {
+      currentUserEmail = firebase.auth().currentUser.email
+      currentUserName = currentUserEmail.split('@')[0]
+      this.$store.commit('CURRENTUSERNAME', currentUserName)
       this.isLoggedIn = true
-      this.currentUserEmail = firebase.auth().currentUser.email
     }
     this.$bus.$on('logged', (data) => {
       if (firebase.auth().currentUser) {
+        currentUserEmail = data
+        currentUserName = currentUserEmail.split('@')[0]
+        this.$store.commit('CURRENTUSERNAME', currentUserName)
         this.isLoggedIn = true
-        this.currentUserEmail = data
       }
     })
   },
@@ -71,9 +75,6 @@ export default {
           // this.$router.go({ path: this.$router.path })
           this.$router.go('/login')
         })
-    },
-    login: function () {
-      this.isLoggedIn = true
     }
   }
 }
