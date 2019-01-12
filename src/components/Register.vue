@@ -20,9 +20,9 @@
 </template>
 
 <script>
-// import firebase from 'firebase'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import db from '../main'
 
 export default {
   name: 'Register',
@@ -35,13 +35,28 @@ export default {
   },
   methods: {
     signUp: function () {
+      let userStats = {
+        user: this.email,
+        quizesCompleted: 0,
+        quizesTaken: "{}",
+        averageProcentage: "0.00",
+        averageTime: 0
+      }
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            this.$bus.$emit('logged', this.email)
-            this.$router.replace('Dashboard')
+            db.collection('users').add(userStats)
+              .then(docRef => {
+                // console.log('User stats added: ', docRef.id)
+
+                this.$bus.$emit('logged', this.email)
+                this.$router.replace('Dashboard')
+              })
+              .catch(error => {
+                console.error('Error adding user: ', error)
+              })
           },
           err => {
             alert('Oops. ' + err.message)

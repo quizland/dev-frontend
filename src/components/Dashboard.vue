@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import db from '../main'
 
 export default {
@@ -31,7 +33,25 @@ export default {
         categories.push(doc.data())
       })
       this.$store.commit('CATEGORIES', categories)
-      this.loaded = true
+
+      let userStatistic = {
+        quizesCompleted: 0,
+        quizesTaken: {},
+        averageProcentage: "0.00",
+        averageTime: 0
+      }
+      db.collection('users').where('user', '==', firebase.auth().currentUser.email).get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          userStatistic.quizesCompleted = doc.data().quizesCompleted
+          userStatistic.averageProcentage = doc.data().averageProcentage
+          userStatistic.averageTime = doc.data().averageTime
+          userStatistic.quizesTaken = JSON.parse(doc.data().quizesTaken)
+        })
+        this.$store.commit('USERSTATISTIC', userStatistic)
+
+        this.loaded = true
+      })
+
     })
   },
   computed: {

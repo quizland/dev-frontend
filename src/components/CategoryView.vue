@@ -11,6 +11,8 @@
           <br>
           <h4>
             Quiz No {{ index + 1 }}
+            <span v-if="checkIfQuizTaken(index + 1)" style="color: pink"> (tried)</span>
+            <span v-else style="color: GreenYellow"> (not tried)</span>
           </h4>
         </div>
       </li>
@@ -32,6 +34,9 @@ export default {
     categories () {
       return this.$store.getters.getCategories
     },
+    userStatistic () {
+      return this.$store.getters.getUserStatistic
+    },
     categoryIndex () {
       return this.categories.findIndex(x => x.category === this.categoryId)
     }
@@ -39,6 +44,12 @@ export default {
   methods: {
     choseQuiz (index) {
       this.$router.push('/' + this.categoryId + '/quiz/' + (Number(index) + 1))
+    },
+    checkIfQuizTaken (quizId) {
+      if (this.userStatistic.quizesTaken[this.categoryId] && this.userStatistic.quizesTaken[this.categoryId].includes(quizId.toString())) {
+        return true
+      }
+      return false
     }
   }
 }
