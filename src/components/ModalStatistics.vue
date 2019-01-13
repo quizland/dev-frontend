@@ -56,12 +56,12 @@ export default {
     }
   },
   methods: {
-     timeToString (timestamp) {
-      let miliseconds = timestamp % 1000;
+    timeToString (timestamp) {
+      let miliseconds = timestamp % 1000
       let res = Math.floor(timestamp / 1000)
-      let seconds = Math.floor(res % 60);
-      let minutes = Math.floor(res / 60) % 60;
-      return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + '.' + miliseconds;
+      let seconds = Math.floor(res % 60)
+      let minutes = Math.floor(res / 60) % 60
+      return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + '.' + miliseconds
     }
   }
 }

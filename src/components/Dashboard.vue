@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="loaded">
+  <div class="container-fluid" v-if="loaded">
     <h1>Quiz Categories</h1>
     <ul>
       <li v-for="(category, index) in categories" :key="index">
@@ -37,7 +37,7 @@ export default {
       let userStatistic = {
         quizesCompleted: 0,
         quizesTaken: {},
-        averageProcentage: "0.00",
+        averageProcentage: '0.00',
         averageTime: 0
       }
       db.collection('users').where('user', '==', firebase.auth().currentUser.email).get().then(querySnapshot => {
@@ -51,7 +51,6 @@ export default {
 
         this.loaded = true
       })
-
     })
   },
   computed: {

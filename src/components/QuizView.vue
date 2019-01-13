@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <router-link :to="'/' + categoryId + '/quizes'">
       <h1>Category {{ categoryId }} <img :src="require('../assets/' + categories[categoryIndex].icon + '.png')" :alt="categories[categoryIndex].icon" class="icon"/></h1>
     </router-link>

@@ -38,8 +38,8 @@ export default {
       let userStats = {
         user: this.email,
         quizesCompleted: 0,
-        quizesTaken: "{}",
-        averageProcentage: "0.00",
+        quizesTaken: '{}',
+        averageProcentage: '0.00',
         averageTime: 0
       }
       firebase

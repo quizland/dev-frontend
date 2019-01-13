@@ -90,4 +90,7 @@ export default {
   cursor: pointer;
   color: black;
 }
+.navbar-brand {
+  color: white;
+}
 </style>

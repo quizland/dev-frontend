@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <h1>Category {{ categoryId }}</h1>
     <ul>
       <li v-for="(quiz, index) in categories[categoryIndex].quizes" :key="index">
