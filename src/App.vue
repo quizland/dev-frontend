@@ -5,11 +5,11 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-2" v-if="showQuotes">
+        <div class="col-md-3" v-if="showQuotes">
           <!-- <button @click="addnum">add quote id</button> -->
           <quote :quote="quote" @changeQuote="getRandomQuote"></quote>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9">
           <router-view :key="$route.fullPath"/>
         </div>
       </div>

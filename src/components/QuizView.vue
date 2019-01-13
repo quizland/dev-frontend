@@ -14,21 +14,23 @@
         <form>
           <div class="card">
             <!-- <h5>{{ question.question }}</h5> -->
+            <div class="question">
             <h5 v-html="question.question"></h5>
-            <ul>
-              <li v-for="(answer, j) in question.answers" :key="j">
-                <label class="radio">
-                    <input type="radio" name="answer" :value="answer" v-model="pickedAnswers[index]">
-                    <span> {{answer}} </span>
-                </label>
-              </li>
-              <div v-if="showAnswers">
-                <span style="color: green">Correct answer: {{ question.answers[question.correctAnswer] }}</span>&nbsp;&nbsp;&nbsp;
-                <span :style="'color: ' + (pickedAnswers[index] === question.answers[question.correctAnswer] ? 'green' : 'red')">
-                  Your answer: {{ pickedAnswers[index] }}
-                </span>
-              </div>
-            </ul>
+              <ul>
+                <li v-for="(answer, j) in question.answers" :key="j">
+                  <label class="radio">
+                      <input type="radio" name="answer" :value="answer" v-model="pickedAnswers[index]">
+                      <span> {{answer}} </span>
+                  </label>
+                </li>
+                <div v-if="showAnswers">
+                  <span style="color: green">Correct answer: {{ question.answers[question.correctAnswer] }}</span>&nbsp;&nbsp;&nbsp;
+                  <span :style="'color: ' + (pickedAnswers[index] === question.answers[question.correctAnswer] ? 'green' : 'red')">
+                    Your answer: {{ pickedAnswers[index] }}
+                  </span>
+                </div>
+              </ul>
+            </div>
           </div>
         </form>
       </li>
@@ -165,5 +167,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+.question {
+  margin: auto;
+	padding: 10px 0;
+	text-align: left;
+	width: 50%;
+}
 </style>
