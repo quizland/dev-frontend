@@ -132,10 +132,13 @@ export default {
       let userStats = {
         user: firebase.auth().currentUser.email,
         quizesCompleted: count + 1,
-        quizesTaken: JSON.stringify(quizesTaken),
+        quizesTaken: quizesTaken,
         averageProcentage: ((+this.userStatistic.averageProcentage * count + +this.resultProcentage) / (count + 1)).toFixed(2),
         averageTime: Math.round((this.userStatistic.averageTime * count + this.completionTime) / (count + 1))
       }
+
+      this.$store.commit('USERSTATISTIC', userStats)
+      userStats.quizesTaken = JSON.stringify(quizesTaken)
 
       db.collection('users').where('user', '==', userEmail).get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
@@ -147,6 +150,7 @@ export default {
             });
           })
         })
+
     },
     previousQuiz () {
       this.$router.replace('/' + this.categoryId + '/quiz/' + (Number(this.quizId) - 1))

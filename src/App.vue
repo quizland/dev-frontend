@@ -69,6 +69,7 @@ export default {
           querySnapshot.forEach((doc) => {
             doc.ref.update(userStats)
             .then(() => {
+              userStats.quizesTaken = {}
               this.$store.commit('USERSTATISTIC', userStats)
               console.log('Statistics cleared!')
             })
@@ -88,7 +89,7 @@ export default {
           quote.quote = doc.data().quote
           quote.author = doc.data().author
           quote.quoteId = doc.data().quoteId
-          console.log('data: ', doc.data())
+          console.log('quote of the day: ', doc.data())
         })
         this.quote = quote
       })

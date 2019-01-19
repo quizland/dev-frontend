@@ -45,7 +45,7 @@ export default {
 .quote {
   cursor: pointer;
 }
-.quote:hover {
+/* .quote:hover {
   background-color: #ffe2e2;
-}
+} */
 </style>

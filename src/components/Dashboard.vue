@@ -27,31 +27,38 @@ export default {
     }
   },
   beforeCreate () {
-    let categories = []
-    db.collection('categories').orderBy('category').get().then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        categories.push(doc.data())
-      })
-      this.$store.commit('CATEGORIES', categories)
-
-      let userStatistic = {
-        quizesCompleted: 0,
-        quizesTaken: {},
-        averageProcentage: '0.00',
-        averageTime: 0
-      }
-      db.collection('users').where('user', '==', firebase.auth().currentUser.email).get().then(querySnapshot => {
+    if (this.$store.getters.getCategories.length === 0) {
+      let categories = []
+      db.collection('categories').orderBy('category').get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          userStatistic.quizesCompleted = doc.data().quizesCompleted
-          userStatistic.averageProcentage = doc.data().averageProcentage
-          userStatistic.averageTime = doc.data().averageTime
-          userStatistic.quizesTaken = JSON.parse(doc.data().quizesTaken)
+          categories.push(doc.data())
         })
-        this.$store.commit('USERSTATISTIC', userStatistic)
+        this.$store.commit('CATEGORIES', categories)
 
-        this.loaded = true
+        let userStatistic = {
+          quizesCompleted: 0,
+          quizesTaken: {},
+          averageProcentage: '0.00',
+          averageTime: 0
+        }
+        db.collection('users').where('user', '==', firebase.auth().currentUser.email).get().then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            userStatistic.quizesCompleted = doc.data().quizesCompleted
+            userStatistic.averageProcentage = doc.data().averageProcentage
+            userStatistic.averageTime = doc.data().averageTime
+            userStatistic.quizesTaken = JSON.parse(doc.data().quizesTaken)
+          })
+          this.$store.commit('USERSTATISTIC', userStatistic)
+
+          this.loaded = true
+        })
       })
-    })
+    }
+  },
+  mounted () {
+    if (this.categories.length) {
+      this.loaded = true
+    }
   },
   computed: {
     categories () {
