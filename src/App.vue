@@ -42,7 +42,7 @@ export default {
     return {
       showStatistics: false,
       showQuotes: true,
-      quoteCount: 133,
+      quoteCount: 233, // number of quotes in the db
       quote: {}
     }
   },
