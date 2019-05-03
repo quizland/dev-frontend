@@ -81,4 +81,8 @@ export default {
   padding: 10px;
   float: center;
 }
+.card:hover {
+  background-color: #ECDEEC;
+  cursor: pointer;
+}
 </style>
