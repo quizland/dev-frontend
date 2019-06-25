@@ -10,7 +10,7 @@
           <router-link to="/" class="navbar-brand"><h1>QUIZ LAND</h1></router-link>
         </div>
         <div class="col-md-2">
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li v-if="isLoggedIn" class="nav-item"><span class="username" @click="$bus.$emit('statistics')">Hello {{currentUserName}} </span></li>
               <li v-if="!isLoggedIn" class="nav-item">

@@ -82,7 +82,7 @@ export default {
   float: center;
 }
 .card:hover {
-  background-color: #ECDEEC;
+  background-color: rgb(248, 244, 248);
   cursor: pointer;
 }
 </style>
