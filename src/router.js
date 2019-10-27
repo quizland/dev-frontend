@@ -1,25 +1,93 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+// import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+
+import Dashboard from './components/Dashboard.vue'
+import About from './components/About.vue'
+import CategoryView from './components/CategoryView.vue'
+import QuizView from './components/QuizView.vue'
+import Login from './components/Login.vue'
+import Register from './components/Register.vue'
+import Admin from './components/Admin.vue'
 
 Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
+const router = new Router({
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/dashboard',
+      component: Dashboard,
+      name: Dashboard.name,
+      meta: { title: 'Catergories Dashboard', requiresAuth: true }
     },
     {
       path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: About,
+      name: About.name,
+      meta: { title: 'About Project Quiz Land', requiresAuth: false }
+    },
+    {
+      path: '/:categoryId/quizes',
+      component: CategoryView,
+      name: CategoryView.name,
+      meta: { title: 'Quizes Dashboard', requiresAuth: true },
+      props: true
+    },
+    {
+      path: '/:categoryId/quiz/:quizId',
+      component: QuizView,
+      name: QuizView.name,
+      meta: { title: 'Quiz View', requiresAuth: true },
+      props: true
+    },
+    {
+      path: '/admin',
+      component: Admin,
+      name: Admin.name,
+      meta: { title: 'Admin Panel', requiresAuth: true },
+      props: true
+    },
+    {
+      path: '*',
+      redirect: '/login'
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const currentUser = firebase.auth().currentUser
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if (requiresAuth && !currentUser) {
+    next({
+      path: '/',
+      query: {
+        redirect: to.fullPath
+      }
+    })
+    // next('/login')
+  } else if (!requiresAuth && currentUser) {
+    next('/dashboard')
+  } else {
+    next()
+  }
+})
+
+export default router
