@@ -4,6 +4,18 @@
 
         <div class="container-fluid">
             <div class="row">
+                <loading
+                    :active.sync="showLoader"
+                    loader="spinner"
+                    color="#808080"
+                    background-color="#fff"
+                    :opacity="0.5"
+                    :height="100"
+                    :width="100"
+                    transition="fade"
+                    :can-cancel="false"
+                    :is-full-page="true">
+                </loading>
                 <div class="col-md-3" v-if="showQuotes">
                     <!-- <button @click="addnum">add quote id</button> -->
                     <quote :quote="quote" @changeQuote="getRandomQuote"></quote>
@@ -42,6 +54,7 @@ export default {
     },
     data() {
         return {
+            showLoader: false,
             showStatistics: false,
             showQuotes: true,
             quoteCount: 233, // number of quotes in the db
@@ -52,53 +65,63 @@ export default {
         this.$bus.$on("statistics", data => {
             this.showStatistics = true;
         });
+        this.$bus.$on('show-loader', () => {
+            this.showLoader = true;
+        });
+        this.$bus.$on('hide-loader', () => {
+            this.showLoader = false;
+        });
     },
     mounted() {
         this.getRandomQuote();
     },
     methods: {
         clearStatistics() {
-            if (confirm("Are you sure to erase all your stats?")) {
+            if (confirm('Are you sure to erase all your stats?')) {
+                this.$bus.$emit('show-loader');
                 let userEmail = firebase.auth().currentUser.email;
                 let userStats = {
                     user: userEmail,
                     quizesCompleted: 0,
-                    quizesTaken: "{}",
-                    averageProcentage: "0.00",
+                    quizesTaken: '{}',
+                    averageProcentage: '0.00',
                     averageTime: 0
                 };
-                db.collection("users")
-                    .where("user", "==", userEmail)
+                db.collection('users')
+                    .where('user', '==', userEmail)
                     .get()
                     .then(querySnapshot => {
                         querySnapshot.forEach(doc => {
                             doc.ref.update(userStats).then(() => {
                                 userStats.quizesTaken = {};
-                                this.$store.commit("USERSTATISTIC", userStats);
-                                console.log("Statistics cleared!");
+                                this.$store.commit('USERSTATISTIC', userStats);
+                                console.log('Statistics cleared!');
+                                this.$bus.$emit('hide-loader');
                             });
                         });
                     });
             }
         },
         getRandomQuote() {
+            this.$bus.$emit('show-loader');
             let quote = {
-                quote: "",
-                author: "",
+                quote: '',
+                author: '',
                 quoteId: 0
             };
             let randomId = Math.floor(Math.random() * this.quoteCount);
-            db.collection("quotes")
-                .where("quoteId", "==", randomId)
+            db.collection('quotes')
+                .where('quoteId', '==', randomId)
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
                         quote.quote = doc.data().quote;
                         quote.author = doc.data().author;
                         quote.quoteId = doc.data().quoteId;
-                        console.log("quote of the day: ", doc.data());
+                        console.log('quote of the day: ', doc.data());
                     });
                     this.quote = quote;
+                    this.$bus.$emit('hide-loader');
                 });
         }
         // addnum () {

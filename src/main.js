@@ -10,6 +10,10 @@ import Vuex from 'vuex'
 import VuexStore from './store'
 import EventBus from './eventBus'
 
+// import global component https://www.npmjs.com/package/vue-loading-overlay
+Vue.use(VueLoading)
+Vue.component('loading', VueLoading)
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store(VuexStore)
@@ -24,8 +28,11 @@ firebase.initializeApp(firebaseConfig)
 // const firebaseApp = firebase.initializeApp(firebaseConfig)
 // firebase firestore timestamp fix
 const firestore = firebase.firestore()
-const settings = { timestampsInSnapshots: true }
-firestore.settings(settings)
+
+// timestampsInSnapshots now default to true, so deprecated in future
+// const settings = { timestampsInSnapshots: true }
+// firestore.settings(settings)
+
 // // export default firebaseApp.firestore()
 export default firestore
 

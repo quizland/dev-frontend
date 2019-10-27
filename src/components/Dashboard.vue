@@ -32,6 +32,7 @@ export default {
     },
     beforeCreate() {
         if (this.$store.getters.getCategories.length === 0) {
+            this.$bus.$emit('show-loader');
             let categories = [];
             db.collection("categories")
                 .orderBy("category")
@@ -63,6 +64,7 @@ export default {
                             this.$store.commit("USERSTATISTIC", userStatistic);
 
                             this.loaded = true;
+                            this.$bus.$emit('hide-loader');
                         });
                 });
         }
